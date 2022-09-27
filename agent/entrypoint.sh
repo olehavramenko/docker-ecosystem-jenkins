@@ -1,7 +1,8 @@
 #!/bin/sh
-JENKINS_MASTER_HOST=master
-JENKINS_MASTER_PORT=8080
-NAME="$(hostname)"
+
+# JENKINS_MASTER_HOST=jenkins-master
+# JENKINS_MASTER_PORT=8080
+# NAME=docker-agent-1
 
 export NAME
 envsubst < node.xml.template > node.xml
