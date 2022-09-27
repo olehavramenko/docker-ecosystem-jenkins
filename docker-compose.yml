@@ -4,8 +4,6 @@ services:
     build: ./master
     env_file: .env
     environment:
-      - GIT_CREDENTIALS_USERNAME
-      - GIT_CREDENTIALS_PASSWORD
       - JENKINS_ADMINISTRATOR_USERNAME
       - JENKINS_ADMINISTRATOR_PASSWORD
     ports:
