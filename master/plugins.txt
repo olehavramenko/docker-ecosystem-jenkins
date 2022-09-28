@@ -42,3 +42,5 @@ ws-cleanup:0.43
 xunit:3.1.0
 rebuild:1.34
 durable-task:500.v8927d9fd99d8
+ansible:1.1
+role-strategy:562.v44e9a_e828d0e

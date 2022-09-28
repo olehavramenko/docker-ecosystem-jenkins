@@ -2,7 +2,7 @@
 <slave>
   <name>${NAME}</name>
   <description></description>
-  <remoteFS>/var/jenkins</remoteFS>
+  <remoteFS>/jenkins-agent</remoteFS>
   <numExecutors>5</numExecutors>
   <mode>NORMAL</mode>
   <launcher class="hudson.slaves.JNLPLauncher"/>

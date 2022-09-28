@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.370-jdk11
+FROM jenkins/jenkins:2.371-jdk11
 
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true
 

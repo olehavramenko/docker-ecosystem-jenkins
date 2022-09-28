@@ -13,11 +13,19 @@ RUN apt-get update -y && \
   ./install-docker-compose.sh && \
   ./install-envsubst.sh && \
   ./install-java.sh && \
+  useradd -ms /bin/bash jenkins-agent && \
+  usermod -aG docker jenkins-agent && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
+
+WORKDIR /jenkins-agent
 
 COPY ./node.xml.template .
 COPY ./wait-for-it.sh .
 COPY ./entrypoint.sh .
+
+RUN chown -R jenkins-agent:jenkins-agent /jenkins-agent
+
+USER jenkins-agent
 
 ENTRYPOINT ["./entrypoint.sh"]
