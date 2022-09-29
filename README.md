@@ -1,7 +1,3 @@
-# docker-ecosystem-jenkins
-
-A Jenkins deployment with docker-compose-enabled nodes and some sample projects
-
 ## Deployment
 
 ### Setup
@@ -10,8 +6,6 @@ A Jenkins deployment with docker-compose-enabled nodes and some sample projects
 
 The following environment variables are required for this project:
 
-- GIT_CREDENTIALS_USERNAME: Your GitHub username
-- GIT_CREDENTIALS_PASSWORD: Your GitHub password (or personal token)
 - JENKINS_ADMINISTRATOR_USERNAME: The Jenkins administrator username
 - JENKINS_ADMINISTRATOR_PASSWORD: The Jenkins administrator password
 
@@ -34,7 +28,3 @@ This project is deployed with Docker. The easiest way to setup a Docker environm
 ```bash
 export $(cat .env | xargs) && docker-compose up
 ```
-
-## Jenkins Dashboard
-
-1. Go to `http://localhost:8080` in your browser.

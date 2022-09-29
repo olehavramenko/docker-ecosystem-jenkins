@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+  jenkins-master:
+    build: ./master
+    env_file: .env
+    environment:
+      - JENKINS_ADMINISTRATOR_USERNAME
+      - JENKINS_ADMINISTRATOR_PASSWORD
+      - JENKINS_ADMINISTRATOR_EMAIL
+      - JENKINS_URL
+      - TZ=UTC
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    user: jenkins:jenkins
+    volumes:
+      - "jenkins_master_data:/var/jenkins_home"
+    networks: 
+      - jenkins
+  docker-agent-1:
+    build: ./agent
+    environment:
+      - JENKINS_ADMINISTRATOR_USERNAME
+      - JENKINS_ADMINISTRATOR_PASSWORD
+      - JENKINS_MASTER_HOST_INTERNAL=jenkins-master
+      - JENKINS_MASTER_PORT=8080
+      - NAME=docker-agent-1
+    user: jenkins-agent:115 # 115 - id of docker group on the host
+    depends_on: 
+      - jenkins-master
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - docker_agent_1_data:/jenkins-agent
+    networks: 
+      - jenkins
+
+  backup:
+    image: jareware/docker-volume-backup:2.6.0
+    volumes:
+      - jenkins_master_data_backup:/backup/jenkins-data:ro    # Mount the Jenkins data volume (as read-only)
+      - ../backups:/archive                                   # Mount a local folder as the backup archive
+
+volumes:
+  jenkins_master_data:
+    driver: local
+  docker_agent_1_data:
+    driver: local
+  jenkins_master_data_backup:
+    driver: local
+
+networks:
+  jenkins:
+    driver: bridge
