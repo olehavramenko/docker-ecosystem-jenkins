@@ -3,6 +3,7 @@ services:
   jenkins-master:
     build: ./master
     env_file: .env
+    restart: always
     environment:
       - JENKINS_ADMINISTRATOR_USERNAME
       - JENKINS_ADMINISTRATOR_PASSWORD
@@ -19,6 +20,7 @@ services:
       - jenkins
   docker-agent-1:
     build: ./agent
+    restart: always
     environment:
       - JENKINS_ADMINISTRATOR_USERNAME
       - JENKINS_ADMINISTRATOR_PASSWORD
@@ -35,17 +37,21 @@ services:
       - jenkins
 
   backup:
-    image: jareware/docker-volume-backup:2.6.0
+    image: offen/docker-volume-backup:v2
+    restart: always
+    environment:
+      BACKUP_FILENAME: backup-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_PRUNING_PREFIX: backup-
+      BACKUP_RETENTION_DAYS: 7
+      BACKUP_CRON_EXPRESSION: 0 */6 * * *
     volumes:
-      - jenkins_master_data_backup:/backup/jenkins-data:ro    # Mount the Jenkins data volume (as read-only)
-      - ../backups:/archive                                   # Mount a local folder as the backup archive
+      - jenkins_master_data:/backup/jenkins-data:ro     # Mount the Jenkins data volume (as read-only)
+      - ../jenkins-backups:/archive                            # Mount a local folder as the backup archive
 
 volumes:
   jenkins_master_data:
     driver: local
   docker_agent_1_data:
-    driver: local
-  jenkins_master_data_backup:
     driver: local
 
 networks:
