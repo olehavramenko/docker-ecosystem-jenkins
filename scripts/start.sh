@@ -16,7 +16,7 @@ export JENKINS_BACKUP_LOCAL_PATH=../jenkins-backups
 # cat /etc/group and get docker group id
 export LOCAL_DOCKER_GROUP_ID=115
 
-readonly output_compose=docker-compose-main.yml
+readonly output_compose=docker-compose-main-generated.yml
 readonly template_compose=docker-compose-main.template
 
 success() {
