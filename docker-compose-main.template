@@ -1,0 +1,59 @@
+version: "3.8"
+services:
+  ${JENKINS_MASTER_SERVICE_NAME}:
+    build: ./master
+    env_file: .env
+    restart: always
+    environment:
+      - JENKINS_ADMINISTRATOR_USERNAME
+      - JENKINS_ADMINISTRATOR_PASSWORD
+      - JENKINS_ADMINISTRATOR_EMAIL=${JENKINS_ADMINISTRATOR_EMAIL}
+      - JENKINS_URL=localhost:${JENKINS_MASTER_PORT}
+      - TZ=${JENKINS_TIMEZONE}
+    ports:
+      - "${JENKINS_MASTER_PORT}:${JENKINS_MASTER_PORT}"
+      - "${JENKINS_AGENT_PORT}:${JENKINS_AGENT_PORT}"
+    user: jenkins:jenkins
+    volumes:
+      - "${JENKINS_MASTER_DOCKER_VOLUME}:/var/jenkins_home"
+    networks: 
+      - jenkins
+  ${JENKINS_AGENT_NAME}:
+    build: ./agent
+    restart: always
+    environment:
+      - JENKINS_AGENT_USERNAME
+      - JENKINS_AGENT_PASSWORD
+      - JENKINS_MASTER_HOST_INTERNAL=${JENKINS_MASTER_SERVICE_NAME}
+      - JENKINS_MASTER_PORT=${JENKINS_MASTER_PORT}
+      - NAME=${JENKINS_AGENT_NAME}
+    user: jenkins-agent:${LOCAL_DOCKER_GROUP_ID} # id of docker group on the host
+    depends_on: 
+      - ${JENKINS_MASTER_SERVICE_NAME}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${JENKINS_AGENT_DOCKER_VOLUME}:/jenkins-agent
+    networks: 
+      - jenkins
+
+  backup:
+    image: offen/docker-volume-backup:v2
+    restart: always
+    environment:
+      BACKUP_FILENAME: backup-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_PRUNING_PREFIX: backup-
+      BACKUP_RETENTION_DAYS: ${JENKINS_BACKUP_RETENTION_DAYS}
+      BACKUP_CRON_EXPRESSION: ${JENKINS_BACKUP_CRON_EXPRESSION}
+    volumes:
+      - ${JENKINS_MASTER_DOCKER_VOLUME}:/backup/jenkins-data:ro     # Mount the Jenkins data volume (as read-only)
+      - ${JENKINS_BACKUP_LOCAL_PATH}:/archive                       # Mount a local folder as the backup archive
+
+volumes:
+  ${JENKINS_MASTER_DOCKER_VOLUME}:
+    driver: local
+  ${JENKINS_AGENT_DOCKER_VOLUME}:
+    driver: local
+
+networks:
+  jenkins:
+    driver: bridge

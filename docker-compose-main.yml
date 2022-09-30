@@ -7,8 +7,8 @@ services:
     environment:
       - JENKINS_ADMINISTRATOR_USERNAME
       - JENKINS_ADMINISTRATOR_PASSWORD
-      - JENKINS_ADMINISTRATOR_EMAIL
-      - JENKINS_URL
+      - JENKINS_ADMINISTRATOR_EMAIL=admin@mail.com
+      - JENKINS_URL=localhost:8080
       - TZ=UTC
     ports:
       - "8080:8080"
@@ -22,12 +22,12 @@ services:
     build: ./agent
     restart: always
     environment:
-      - JENKINS_ADMINISTRATOR_USERNAME
-      - JENKINS_ADMINISTRATOR_PASSWORD
+      - JENKINS_AGENT_USERNAME
+      - JENKINS_AGENT_PASSWORD
       - JENKINS_MASTER_HOST_INTERNAL=jenkins-master
       - JENKINS_MASTER_PORT=8080
       - NAME=docker-agent-1
-    user: jenkins-agent:115 # 115 - id of docker group on the host
+    user: jenkins-agent:115 # id of docker group on the host
     depends_on: 
       - jenkins-master
     volumes:
@@ -46,7 +46,7 @@ services:
       BACKUP_CRON_EXPRESSION: 0 */6 * * *
     volumes:
       - jenkins_master_data:/backup/jenkins-data:ro     # Mount the Jenkins data volume (as read-only)
-      - ../jenkins-backups:/archive                            # Mount a local folder as the backup archive
+      - ../jenkins-backups:/archive                       # Mount a local folder as the backup archive
 
 volumes:
   jenkins_master_data:

@@ -12,7 +12,7 @@ envsubst < node.xml.template > node.xml
 while sleep 10
 do
   curl \
-    -u ${JENKINS_ADMINISTRATOR_USERNAME}:${JENKINS_ADMINISTRATOR_PASSWORD} \
+    -u ${JENKINS_AGENT_USERNAME}:${JENKINS_AGENT_PASSWORD} \
     "http://${JENKINS_MASTER_HOST_INTERNAL}:${JENKINS_MASTER_PORT}/jnlpJars/jenkins-cli.jar" \
     --output jenkins-cli.jar
 
@@ -20,16 +20,16 @@ do
   java \
     -jar jenkins-cli.jar \
     -s "http://${JENKINS_MASTER_HOST_INTERNAL}:${JENKINS_MASTER_PORT}" \
-    -auth ${JENKINS_ADMINISTRATOR_USERNAME}:${JENKINS_ADMINISTRATOR_PASSWORD} \
+    -auth ${JENKINS_AGENT_USERNAME}:${JENKINS_AGENT_PASSWORD} \
     create-node "${NAME}"
 
   curl \
-    -u ${JENKINS_ADMINISTRATOR_USERNAME}:${JENKINS_ADMINISTRATOR_PASSWORD} \
+    -u ${JENKINS_AGENT_USERNAME}:${JENKINS_AGENT_PASSWORD} \
     "http://${JENKINS_MASTER_HOST_INTERNAL}:${JENKINS_MASTER_PORT}/jnlpJars/slave.jar" \
     --output slave.jar
 
   java \
     -jar slave.jar \
-    -jnlpCredentials ${JENKINS_ADMINISTRATOR_USERNAME}:${JENKINS_ADMINISTRATOR_PASSWORD} \
+    -jnlpCredentials ${JENKINS_AGENT_USERNAME}:${JENKINS_AGENT_PASSWORD} \
     -jnlpUrl "http://${JENKINS_MASTER_HOST_INTERNAL}:${JENKINS_MASTER_PORT}/computer/${NAME}/slave-agent.jnlp"
 done
