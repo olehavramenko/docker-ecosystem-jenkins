@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   ${JENKINS_MASTER_SERVICE_NAME}:
-    build: ./master
+    image: oavramenk/jenkins-master:1.0
     env_file: .env
     restart: always
     environment:
@@ -19,7 +19,7 @@ services:
     networks: 
       - jenkins
   ${JENKINS_AGENT_NAME}:
-    build: ./agent
+    image: oavramenk/jenkins-agent:1.0
     restart: always
     environment:
       - JENKINS_AGENT_USERNAME

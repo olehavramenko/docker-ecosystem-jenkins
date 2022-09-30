@@ -68,5 +68,5 @@ This project is deployed with Docker. The easiest way to setup a Docker environm
     ```
 5. Start Jenkins containers.
     ```
-    ./script/deploy.sh
+    ./scripts/start.sh
     ```
