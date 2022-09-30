@@ -4,10 +4,10 @@
 
 The following environment variables are required for this project:
 
-- JENKINS_ADMINISTRATOR_USERNAME: The Jenkins administrator username
-- JENKINS_ADMINISTRATOR_PASSWORD: The Jenkins administrator password
-- JENKINS_AGENT_USERNAME: The Jenkins user username for agents
-- JENKINS_AGENT_PASSWORD: The Jenkins user pasword for agents
+- JENKINS_ADMINISTRATOR_USERNAME: The Jenkins administrator username.
+- JENKINS_ADMINISTRATOR_PASSWORD: The Jenkins administrator password.
+- JENKINS_AGENT_USERNAME: The Jenkins user username for agents.
+- JENKINS_AGENT_PASSWORD: The Jenkins user pasword for agents.
 
 For convenience, an `.env.template` file has been included in the repository with the required placeholders.
 
@@ -30,7 +30,7 @@ This project is deployed with Docker. The easiest way to setup a Docker environm
 ```
 
 ## Revocery from backup
-**<TO DO: automate recovery process...
+*TO DO:* automate recovery process...
 
 *Steps:*
 1. Stop and remove docker containers.

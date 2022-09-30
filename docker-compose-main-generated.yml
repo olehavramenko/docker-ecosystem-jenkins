@@ -27,7 +27,7 @@ services:
       - JENKINS_MASTER_HOST_INTERNAL=jenkins-master
       - JENKINS_MASTER_PORT=8080
       - NAME=docker-agent-1
-    user: jenkins-agent:115 # id of docker group on the host
+    user: jenkins-agent:998 # id of docker group on the host
     depends_on: 
       - jenkins-master
     volumes:
