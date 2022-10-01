@@ -46,7 +46,7 @@ services:
       BACKUP_CRON_EXPRESSION: 0 */6 * * *
     volumes:
       - jenkins_master_data:/backup/jenkins-data:ro     # Mount the Jenkins data volume (as read-only)
-      - ../jenkins-backups:/archive                       # Mount a local folder as the backup archive
+      - /opt/jenkins-backups:/archive                       # Mount a local folder as the backup archive
 
 volumes:
   jenkins_master_data:

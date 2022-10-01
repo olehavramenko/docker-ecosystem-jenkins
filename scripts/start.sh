@@ -18,7 +18,7 @@ export LOCAL_DOCKER_GROUP_ID=998
 # Backups
 export JENKINS_BACKUP_RETENTION_DAYS=7
 export JENKINS_BACKUP_CRON_EXPRESSION="0 */6 * * *"
-export JENKINS_BACKUP_LOCAL_PATH=../jenkins-backups
+export JENKINS_BACKUP_LOCAL_PATH=/opt/jenkins-backups
 
 readonly output_compose=docker-compose-main-generated.yml
 readonly template_compose=docker-compose-main.template
