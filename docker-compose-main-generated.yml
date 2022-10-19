@@ -48,10 +48,71 @@ services:
       - jenkins_master_data:/backup/jenkins-data:ro     # Mount the Jenkins data volume (as read-only)
       - /opt/jenkins-backups:/archive                       # Mount a local folder as the backup archive
 
+#  -------------------  Agents for old jobs ----------------------
+# To be removed after migration to pipelines will be completed
+
+  java-11-agent:
+    image: oavramenk/java-jenkins-agent:11
+    restart: always
+    environment:
+      - JENKINS_AGENT_USERNAME
+      - JENKINS_AGENT_PASSWORD
+      - JENKINS_MASTER_HOST_INTERNAL=jenkins-master
+      - JENKINS_MASTER_PORT=8080
+      - NAME=java-11-agent
+    depends_on: 
+      - jenkins-master
+    volumes:
+      - java-11-agent:/jenkins-agent
+    networks: 
+      - jenkins
+
+  ansible-agent:
+    image: oavramenk/ansible-jenkins-agent:2.9
+    restart: always
+    environment:
+      - JENKINS_AGENT_USERNAME
+      - JENKINS_AGENT_PASSWORD
+      - JENKINS_MASTER_HOST_INTERNAL=jenkins-master
+      - JENKINS_MASTER_PORT=8080
+      - NAME=ansible-agent
+    depends_on: 
+      - jenkins-master
+    volumes:
+      - ansible-agent:/jenkins-agent
+    networks: 
+      - jenkins
+
+  node8-agent:
+    image: oavramenk/node-jenkins-agent:8.15
+    restart: always
+    environment:
+      - JENKINS_AGENT_USERNAME
+      - JENKINS_AGENT_PASSWORD
+      - JENKINS_MASTER_HOST_INTERNAL=jenkins-master
+      - JENKINS_MASTER_PORT=8080
+      - NAME=node8-agent
+    depends_on: 
+      - jenkins-master
+    volumes:
+      - node8-agent:/jenkins-agent
+    networks: 
+      - jenkins
+    
+# -----------------------------------------------------------------------
+
 volumes:
   jenkins_master_data:
     driver: local
   docker_agent_1_data:
+    driver: local
+# Volumes for old jobs.
+# To be removed after migration to pipelines will be completed
+  java-11-agent:
+    driver: local
+  ansible-agent:
+    driver: local
+  node8-agent:
     driver: local
 
 networks:

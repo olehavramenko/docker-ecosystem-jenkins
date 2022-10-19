@@ -1,0 +1,19 @@
+FROM willhallonline/ansible:2.9-ubuntu-20.04
+
+COPY ./install-envsubst.sh .
+COPY ./install-java.sh .
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update -y && \
+  apt-get install -y apt-utils sshpass curl openjdk-11-jdk-headless  && \
+  ./install-envsubst.sh && \
+  rm -rf /var/lib/apt/lists/*
+
+WORKDIR /jenkins-agent
+
+COPY ./node.xml.template .
+COPY ./wait-for-it.sh .
+COPY ./entrypoint.sh .
+
+ENTRYPOINT ["./entrypoint.sh"]

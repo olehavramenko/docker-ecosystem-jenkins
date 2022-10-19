@@ -1,0 +1,20 @@
+FROM node:8.15
+
+COPY ./install-envsubst.sh .
+COPY ./install-java.sh .
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN echo 'deb http://ftp.debian.org/debian stretch-backports main' | tee /etc/apt/sources.list.d/stretch-backports.list && \
+    apt-get update -y && \
+    apt-get install -y --allow-unauthenticated apt-utils maven curl openjdk-11-jdk-headless && \
+    ./install-envsubst.sh && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /jenkins-agent
+
+COPY ./node.xml.template .
+COPY ./wait-for-it.sh .
+COPY ./entrypoint.sh .
+
+ENTRYPOINT ["./entrypoint.sh"]

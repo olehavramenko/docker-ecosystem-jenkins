@@ -1,0 +1,17 @@
+FROM maven:3.8.6-openjdk-11
+
+COPY ./install-envsubst.sh .
+COPY ./install-java.sh .
+
+RUN apt-get update -y && \
+    apt-get install -y apt-utils curl && \
+    ./install-envsubst.sh && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /jenkins-agent
+
+COPY ./node.xml.template .
+COPY ./wait-for-it.sh .
+COPY ./entrypoint.sh .
+
+ENTRYPOINT ["./entrypoint.sh"]
