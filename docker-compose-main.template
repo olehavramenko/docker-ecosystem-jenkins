@@ -51,51 +51,19 @@ services:
 #  -------------------  Agents for old jobs ----------------------
 # To be removed after migration to pipelines will be completed
 
-  java-11-agent:
-    image: oavramenk/java-jenkins-agent:11
+  agent-generic-1:
+    image: oavramenk/jenkins-agent-generic:1.0
     restart: always
     environment:
       - JENKINS_AGENT_USERNAME
       - JENKINS_AGENT_PASSWORD
       - JENKINS_MASTER_HOST_INTERNAL=${JENKINS_MASTER_SERVICE_NAME}
       - JENKINS_MASTER_PORT=${JENKINS_MASTER_PORT}
-      - NAME=java-11-agent
+      - NAME=agent-generic-1
     depends_on: 
       - ${JENKINS_MASTER_SERVICE_NAME}
     volumes:
-      - java-11-agent:/jenkins-agent
-    networks: 
-      - jenkins
-
-  ansible-agent:
-    image: oavramenk/ansible-jenkins-agent:2.9
-    restart: always
-    environment:
-      - JENKINS_AGENT_USERNAME
-      - JENKINS_AGENT_PASSWORD
-      - JENKINS_MASTER_HOST_INTERNAL=${JENKINS_MASTER_SERVICE_NAME}
-      - JENKINS_MASTER_PORT=${JENKINS_MASTER_PORT}
-      - NAME=ansible-agent
-    depends_on: 
-      - ${JENKINS_MASTER_SERVICE_NAME}
-    volumes:
-      - ansible-agent:/jenkins-agent
-    networks: 
-      - jenkins
-
-  node8-agent:
-    image: oavramenk/node-jenkins-agent:8.15
-    restart: always
-    environment:
-      - JENKINS_AGENT_USERNAME
-      - JENKINS_AGENT_PASSWORD
-      - JENKINS_MASTER_HOST_INTERNAL=${JENKINS_MASTER_SERVICE_NAME}
-      - JENKINS_MASTER_PORT=${JENKINS_MASTER_PORT}
-      - NAME=node8-agent
-    depends_on: 
-      - ${JENKINS_MASTER_SERVICE_NAME}
-    volumes:
-      - node8-agent:/jenkins-agent
+      - agent-generic-1:/jenkins-agent
     networks: 
       - jenkins
     
@@ -108,11 +76,7 @@ volumes:
     driver: local
 # Volumes for old jobs.
 # To be removed after migration to pipelines will be completed
-  java-11-agent:
-    driver: local
-  ansible-agent:
-    driver: local
-  node8-agent:
+  agent-generic-1:
     driver: local
 
 networks:

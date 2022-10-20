@@ -1,12 +1,16 @@
-FROM willhallonline/ansible:2.9-ubuntu-20.04
+FROM ubuntu:18.04
 
 COPY ./install-envsubst.sh .
 COPY ./install-java.sh .
+COPY ./install-ansible.sh .
+COPY ./install-node.sh .
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y && \
-  apt-get install -y apt-utils sshpass curl openjdk-11-jdk-headless  && \
+  apt-get install -y apt-utils sshpass curl openjdk-11-jdk-headless git curl wget maven && \
+  ./install-ansible.sh && \
+  ./install-node.sh && \
   ./install-envsubst.sh && \
   rm -rf /var/lib/apt/lists/*
 
